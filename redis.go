@@ -299,7 +299,10 @@ func (client *Client) sendCommands(cmdArgs <-chan []string, data chan<- interfac
 End:
 
     // Close client and synchronization issues are a nightmare to solve.
+	//add by eric
+	if c != nil {
     c.Close()
+	}
 
     // Push nil back onto queue
     client.pushCon(nil)
@@ -1407,6 +1410,15 @@ func (client *Client) Publish(channel string, val []byte) error {
         return err
     }
     return nil
+}
+
+// Publish a message to a redis server.
+func (client *Client) Publish2(channel string, val []byte) (data interface{}, err error) {
+	data, err = client.sendCommand("PUBLISH", channel, string(val))
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
 }
 
 //Server commands
