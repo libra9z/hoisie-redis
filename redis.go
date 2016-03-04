@@ -1055,6 +1055,15 @@ func (client *Client) Hset(key string, field string, val []byte) (bool, error) {
     return res.(int64) == 1, nil
 }
 
+func (client *Client) Hsetnx(key string, field string, val []byte) (bool, error) {
+    res, err := client.sendCommand("HSETNX", key, field, string(val))
+    if err != nil {
+        return false, err
+    }
+
+    return res.(int64) == 1, nil
+}
+
 func (client *Client) Hget(key string, field string) ([]byte, error) {
     res, _ := client.sendCommand("HGET", key, field)
 
